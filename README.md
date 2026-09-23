@@ -1,136 +1,172 @@
-# See_the_World_MobileApp
+# 🌍 See the World
 
-Aplicatie de calatorie facuta in Flutter, pentru Android. Are trei parti:
-descoperire de locuri pe harta, un jurnal cu locurile tale si un asistent care iti
-da recomandari. Merge si online, si offline.
-Am folosit Timisoara ca exemplu pentru partea de descoperire (locuri, tururi,
-rute), dar codul nu e legat de un oras anume, se poate folosi si in alta parte.
-Ce face
+Aplicație de călătorie făcută în **Flutter**, pentru **Android**. Combină descoperirea de locuri pe hartă, un jurnal de călătorie personal și un asistent AI care oferă recomandări — totul funcționând atât **online**, cât și **offline**.
 
+Exemplul folosit pentru partea de descoperire este orașul **Timișoara** (locuri, tururi, rute), dar codul nu este legat de un oraș anume și poate fi folosit oriunde.
 
+---
 
-Descoperire si rute — o harta cu locuri de vizitat si detalii (descriere,
-poza, coordonate), cautare prin Google Places, navigatie pas cu pas si tururi
-offline (ex. Timisoara City Tour) pentru cand nu ai net.
+## 📑 Cuprins
 
-Jurnal de calatorie — locuri favorite, poze puse pe locurile vizitate
-("memory photos") si un profil cu cateva statistici.
+- [Ce face aplicația](#-ce-face-aplicația)
+- [Tehnologii folosite](#-tehnologii-folosite)
+- [Structura proiectului](#-structura-proiectului)
+- [Configurare și rulare](#-configurare-și-rulare)
+- [Build APK și instalare](#-build-apk-și-instalare)
+- [Asistentul AI (Cloud Function)](#-asistentul-ai-cloud-function)
+- [Teste](#-teste)
 
-Asistent cu recomandari — un chat (scris sau vocal) care recomanda locuri,
-pe baza favoritelor si a locurilor vizitate. Cheia Gemini nu sta in aplicatie,
-ci pe server, intr-o Cloud Function (askGemini), ca sa nu poata fi luata din
-client.
+---
 
-In plus, peste tot: login cu email/parola sau Google/Facebook, tema light/dark si
-preferinte salvate local.
-Tehnologii
+## ✨ Ce face aplicația
 
+### 🗺️ Descoperire și rute
+- Hartă cu locuri de vizitat, fiecare cu descriere, poză și coordonate
+- Căutare prin **Google Places**
+- Navigație pas cu pas
+- Tururi offline (ex. *Timișoara City Tour*) pentru momentele fără internet
 
-Flutter + Dart
-Firebase (Auth, Firestore, Storage, Cloud Functions)
-Google Maps, Places si Directions API
-Google Gemini (chemat de pe server, prin Cloud Function)
-Speech-to-Text si Text-to-Speech pentru asistentul vocal
-Geolocator, Flutter Compass, flutter_map + OpenStreetMap (pentru tururile offline)
+### 📔 Jurnal de călătorie
+- Locuri favorite
+- Poze atașate locurilor vizitate ("memory photos")
+- Profil personal cu statistici
 
-Cum e organizat codul
+### 🤖 Asistent cu recomandări
+- Chat scris **sau vocal**
+- Recomandări bazate pe favorite și pe locurile deja vizitate
+- Cheia Gemini **nu stă în aplicație**, ci pe server, într-o Cloud Function (`askGemini`) — astfel nu poate fi extrasă din client
 
+### 🔧 În plus, peste tot
+- Login cu email/parolă sau Google/Facebook
+- Temă light/dark
+- Preferințe salvate local
+
+---
+
+## 🛠️ Tehnologii folosite
+
+| Categorie | Tehnologii |
+|---|---|
+| Framework | Flutter + Dart |
+| Backend | Firebase (Auth, Firestore, Storage, Cloud Functions) |
+| Hărți & locații | Google Maps, Places API, Directions API |
+| AI | Google Gemini (apelat de pe server, prin Cloud Function) |
+| Voce | Speech-to-Text și Text-to-Speech |
+| Offline | Geolocator, Flutter Compass, flutter_map + OpenStreetMap |
+
+---
+
+## 📁 Structura proiectului
+
+```
 lib/
-  components/   widget-uri refolosite (buton, camp text, buton social)
+  components/   widget-uri refolosite (buton, câmp text, buton social)
   pages/        ecranele app-ului (home, login, register, profil, favorite,
                 tururi offline, asistent AI)
-  services/     logica si integrarile (Discover, profil de gust, cache de dale,
-                poze locale, teme, preferinte)
-  widgets/      bara de navigatie si dialogurile comune
-functions/      Cloud Function askGemini (vorbeste ea cu Gemini)
-test/           teste pentru ranking, profil de gust si componente
+  services/     logica și integrările (Discover, profil de gust, cache de dale,
+                poze locale, teme, preferințe)
+  widgets/      bara de navigație și dialogurile comune
+functions/      Cloud Function askGemini (vorbește ea cu Gemini)
+test/           teste pentru ranking, profil de gust și componente
+```
 
+---
 
-Configurare si rulare
+## ⚙️ Configurare și rulare
 
-De ce ai nevoie
+### De ce ai nevoie
 
+- **Flutter SDK** (canal stable) — verifici cu `flutter doctor`
+- Aplicația e făcută pentru **Android**: `lib/firebase_options.dart` și `android/app/google-services.json` sunt incluse și reale pentru Android. Pentru iOS/web ar mai trebui completată configurația Firebase pentru platformele respective.
+- O cheie **Google Cloud** cu: Maps SDK for Android, Places API, Geocoding API, Directions API
 
-Flutter SDK (canal stable), verifici cu flutter doctor.
-Aplicatia e facuta pentru Android: lib/firebase_options.dart si
-android/app/google-services.json sunt incluse si reale pentru Android. Pentru
-iOS/web ar mai trebui completat config-ul Firebase pentru platformele alea.
-O cheie Google Cloud cu: Maps SDK for Android, Places API, Geocoding API,
-Directions API.
+### Cheile (nu sunt în git)
 
-Cheile (nu sunt in git)
+Cheile se pun în două locuri:
 
-Cheile se pun in doua locuri. google_maps_api.xml e obligatoriu, de acolo isi ia
-harta nativa cheia. dart_defines.json e pentru apelurile din cod (Places,
-Geocoding, Directions) si e folosit de configuratiile din .vscode/launch.json;
-daca lipseste, apelurile astea cad tot pe cheia nativa.
+- **`google_maps_api.xml`** — obligatoriu, de acolo își ia harta nativă cheia
+- **`dart_defines.json`** — pentru apelurile din cod (Places, Geocoding, Directions), folosit de configurațiile din `.vscode/launch.json`; dacă lipsește, apelurile astea cad tot pe cheia nativă
 
+**`android/app/src/main/res/values/google_maps_api.xml`:**
 
-android/app/src/main/res/values/google_maps_api.xml:
-
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="google_maps_api_key">CHEIA_TA</string>
     <string name="google_directions_api_key">CHEIA_TA</string>
     <string name="google_places_api_key">CHEIA_TA</string>
 </resources>
+```
 
+**`dart_defines.json`** (în rădăcina proiectului, fără cheia Gemini — aia stă pe server):
 
-
-dart_defines.json in radacina (fara cheia Gemini, aia sta pe server):
-
+```json
 {
   "GOOGLE_MAPS_API_KEY": "...",
   "GOOGLE_DIRECTIONS_API_KEY": "...",
   "GOOGLE_PLACES_API_KEY": "..."
 }
+```
 
+### Rulare
 
-Rulare
-
-
+```bash
 flutter pub get
 flutter run --dart-define-from-file=dart_defines.json
+```
 
+---
 
+## 📦 Build APK și instalare
 
-Build APK si instalare
+Build de release (semnat cu cheia de debug, deci se instalează direct — vezi `android/app/build.gradle.kts`):
 
-Build de release (e semnat cu cheia de debug, deci se instaleaza direct, vezi
-android/app/build.gradle.kts):
-
+```bash
 flutter build apk --release --dart-define-from-file=dart_defines.json
+```
 
+APK-ul iese în `build/app/outputs/flutter-apk/app-release.apk`. Îl instalezi pe un telefon sau emulator Android conectat:
 
-APK-ul iese in build/app/outputs/flutter-apk/app-release.apk. Il instalezi pe un
-telefon sau emulator Android conectat:
-
+```bash
 flutter install
 # sau direct:
 adb install build/app/outputs/flutter-apk/app-release.apk
+```
 
+Apoi deschizi aplicația din iconiță. Sau, alternativ:
 
-Pe urma deschizi app-ul din iconita. Sau flutter run --release, care face build,
-instalare si pornire dintr-o data.
-Asistentul AI (Cloud Function)
+```bash
+flutter run --release
+```
 
-Cheia Gemini sta doar pe server, ca secret Firebase, nu in client. Se pune o
-singura data si are nevoie de planul Blaze:
+care face build, instalare și pornire dintr-o dată.
 
+---
+
+## 🧠 Asistentul AI (Cloud Function)
+
+Cheia Gemini stă doar pe server, ca secret Firebase, niciodată în client. Se pune o singură dată și are nevoie de planul **Blaze**:
+
+```bash
 npm install -g firebase-tools
 firebase login
 firebase functions:secrets:set GEMINI_API_KEY
 firebase deploy --only functions
+```
 
+Funcția `askGemini` rulează în regiunea `europe-west1`.
 
+> Pași mai detaliați (activare Blaze, schimbarea cheii vechi, emulator local) sunt în [`functions/README.md`](functions/README.md).
 
-Functia askGemini ruleaza in europe-west1. Pasi mai detaliati (Blaze,
-schimbarea cheii vechi, emulator local) sunt in functions/README.md.
-Teste
+---
 
+## ✅ Teste
 
+```bash
 flutter test
+```
 
-
-Testele acopera ranking-ul din Discover, inclinarea recomandarilor dupa profilul
-de gust si componenta de buton principal.
+Testele acoperă:
+- ranking-ul din Discover
+- înclinarea recomandărilor după profilul de gust
+- componenta de buton principal
