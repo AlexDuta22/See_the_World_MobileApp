@@ -35,7 +35,6 @@ Geolocator, Flutter Compass, flutter_map + OpenStreetMap (pentru tururile offlin
 
 Cum e organizat codul
 
-
 lib/
   components/   widget-uri refolosite (buton, camp text, buton social)
   pages/        ecranele app-ului (home, login, register, profil, favorite,
@@ -78,7 +77,6 @@ android/app/src/main/res/values/google_maps_api.xml:
 
 
 
-
 dart_defines.json in radacina (fara cheia Gemini, aia sta pe server):
 
 {
@@ -88,13 +86,12 @@ dart_defines.json in radacina (fara cheia Gemini, aia sta pe server):
 }
 
 
-
-
 Rulare
 
 
 flutter pub get
 flutter run --dart-define-from-file=dart_defines.json
+
 
 
 Build APK si instalare
@@ -124,6 +121,7 @@ npm install -g firebase-tools
 firebase login
 firebase functions:secrets:set GEMINI_API_KEY
 firebase deploy --only functions
+
 
 
 Functia askGemini ruleaza in europe-west1. Pasi mai detaliati (Blaze,
